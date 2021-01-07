@@ -2,13 +2,11 @@
 <head>
     <title>Login</title>
 
-    <link rel="stylesheet" href="../assets/Login/estilo01.css">
+    <link rel="stylesheet" href="../assets/login/css/estilo01.css">
 
 
 </head>
 <body>
-
-
 
 <div class="container" id="container">
     <div class="form-container sign-up-container">
