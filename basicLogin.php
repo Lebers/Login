@@ -200,8 +200,46 @@ opacity: 1;">
             v_error=true;
         }
 
+
         if(!v_error){
 
+            $.ajax({
+                url : 'Auth/create',
+                data : {
+
+                    correo : $("#inp_Usuario").val(),
+                    contrasena : $("#inp_Contrasena").val()
+                },
+                type : 'Post',
+                dataType : 'json',
+                success : function(json) {
+                    console.info('json:',json.acceso);
+
+                    if(json.acceso===true){
+                        // window.location="p_Home/"+json.IdUser;
+                        window.location = "<?= $_SERVER['app.baseURLSe'] ?>/entrada/"+json.IdUser;
+                    }
+
+                    if(json.acceso==='error con el usuario'){
+
+
+                        $(".inp_Contrasena").addClass("is-invalid");
+                        $("#error_contrasena").html("Contraseña no valida para el usuario.");
+
+                    }
+
+                },
+                error : function(jqXHR, status, error) {
+                    console.log(jqXHR);
+                    console.log(status);
+                    console.log(error);
+                    console.log('Disculpe, existió un problema');
+                    // alert("error:");
+                },
+                complete : function(jqXHR, status) {
+                    console.log('Petición realizada');
+                }
+            });
             $.ajax({
                 url : 'http://localhost/lebers/0002-GestorEmpresarial/Ajax/login',
                 data : {
