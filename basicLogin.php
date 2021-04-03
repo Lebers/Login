@@ -48,17 +48,17 @@
         </div>
         <div class="form-container sign-in-container">
             <form action="#">
-                <h1>Sign in</h1>
+                <h1>INICIAR SESIÓN</h1>
                 <div class="social-container">
                     <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
                     <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
                     <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
                 </div>
-                <span>or use your account</span>
-                <input type="email" placeholder="Email" />
-                <input type="password" placeholder="Password" />
+                <span>o usa tu cuenta</span>
+                <input id="inp_Usuario" type="email" placeholder="Email" />
+                <input id="inp_Contrasena" type="password" placeholder="Password" />
                 <a href="#">Olvidé mi contraseña </a>
-                <button>Sign In</button>
+                <button id="link_entrar">INICIAR SESIÓN</button>
             </form>
         </div>
         <div class="overlay-container">
@@ -66,7 +66,7 @@
                 <div class="overlay-panel overlay-left">
                     <h1>Welcome Back!</h1>
                     <p>To keep connected with us please login with your personal info</p>
-                    <button class="ghost" id="signIn">Sign In</button>
+                    <button  class="ghost" id="signIn">INICIAR SESIÓN.</button>
                 </div>
                 <div class="overlay-panel overlay-right">
                     <h1>Hello, Friend!</h1>
@@ -151,6 +151,104 @@ opacity: 1;">
 
 </script>
 
+<script
+        src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+        crossorigin="anonymous">
+
+</script>
+
+<script>
+    $( window ).on( "load", function() {
+
+
+
+        $("#link_entrar").on("click",function (){
+            f_login();
+        })
+
+        $("#link_atras").on("click",function (){
+            window.location="p_login";
+        })
+
+        $("#olvide_contrasena").on("click",function (){
+            window.location="p_olvide_contrasena";
+        })
+
+        $( "#inp_Usuario" ).keypress(function() {
+            $(".inp_Usuario").removeClass("is-invalid");
+        });
+        $( "#inp_Contrasena" ).keypress(function() {
+            $(".inp_Contrasena").removeClass("is-invalid");
+        });
+
+
+    });
+
+    function f_login(){
+
+        let v_error=false;
+
+        if($("#inp_Usuario").val().length==0){
+            $(".inp_Usuario").addClass("is-invalid");
+            v_error=true;
+        }
+
+        if($("#inp_Contrasena").val().length==0){
+            $(".inp_Contrasena").addClass("is-invalid");
+            $("#error_contrasena").html("Ingrese su contraseña.");
+            v_error=true;
+        }
+
+        if(!v_error){
+
+            $.ajax({
+                url : 'http://localhost/lebers/0002-GestorEmpresarial/Ajax/login',
+                data : {
+
+                    correo : $("#inp_Usuario").val(),
+                    contrasena : $("#inp_Contrasena").val()
+                },
+                type : 'Post',
+                dataType : 'json',
+                success : function(json) {
+                    console.info('json:',json.acceso);
+
+                    if(json.acceso===true){
+                        // window.location="p_Home/"+json.IdUser;
+                        window.location = "<?= $_SERVER['app.baseURLSe'] ?>/entrada/"+json.IdUser;
+                    }
+
+                    if(json.acceso==='error con el usuario'){
+
+
+                        $(".inp_Contrasena").addClass("is-invalid");
+                        $("#error_contrasena").html("Contraseña no valida para el usuario.");
+
+                    }
+
+                },
+                error : function(jqXHR, status, error) {
+                    console.log(jqXHR);
+                    console.log(status);
+                    console.log(error);
+                    console.log('Disculpe, existió un problema');
+                    // alert("error:");
+                },
+                complete : function(jqXHR, status) {
+                    console.log('Petición realizada');
+                }
+            });
+        }
+
+
+
+    }
+
+
+
+
+</script>
 
 
 
